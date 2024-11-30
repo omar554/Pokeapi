@@ -1,42 +1,49 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = "deploy-metricas-job_react-app"
+        CLOUD_INSTANCE_IP = "104.197.38.90"
+        APP_PORT = "3000"
+    }
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/omar554/Pokeapi.git'
             }
         }
         stage('Build') {
             steps {
-                script {
-                    // Construir la aplicación en un contenedor con Node.js
-                    docker.build('react-app', '-f Dockerfile .')
-                }
+                echo "Compilando la aplicación..."
+                sh '''
+                docker-compose build
+                '''
             }
         }
         stage('Test') {
             steps {
-                script {
-                    // Ejecutar pruebas en un contenedor con Node.js
-                    docker.image('node:18').inside {
-                        sh 'npm install'
-                        sh 'npm test -- --watchAll=false'
-                    }
-                }
+                echo "Ejecutando pruebas unitarias..."
+                sh '''
+                docker run --rm $DOCKER_IMAGE npm test -- --watchAll=false
+                '''
             }
         }
         stage('Deploy') {
             steps {
-                script {
-                    // Desplegar la aplicación con Nginx
-                    docker.build('deploy-metricas-job_react-app', '-f Dockerfile .')
-                }
+                echo "Desplegando la aplicación..."
+                sh '''
+                docker-compose down
+                docker-compose up -d
+                '''
+                echo "Aplicación desplegada en http://$CLOUD_INSTANCE_IP:$APP_PORT"
             }
         }
     }
     post {
+        success {
+            echo "Pipeline completado exitosamente."
+        }
         failure {
-            echo 'El pipeline ha fallado.'
+            echo "El pipeline ha fallado. Revisa los logs para más detalles."
         }
     }
 }

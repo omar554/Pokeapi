@@ -13,6 +13,9 @@ RUN npm install
 # Copiar todo el código de la aplicación al contenedor
 COPY . .
 
+# Ejecutar pruebas unitarias
+RUN npm test -- --watchAll=false
+
 # Construir la aplicación para producción
 RUN npm run build
 
