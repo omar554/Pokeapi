@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/omar554/Pokeapi.git'
+                git branch: 'main', url: 'https://github.com/omar554/Pokeapi.git'
             }
         }
         stage('Build') {
