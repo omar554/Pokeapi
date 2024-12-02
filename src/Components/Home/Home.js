@@ -16,7 +16,7 @@ const Home = () => {
                 <SearchBar />
                 <HomeMenu />
             </article>
-            {/* <NewsSection /> */}
+            <NewsSection /> 
         </section>
     );
 };
