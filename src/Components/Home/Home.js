@@ -10,7 +10,7 @@ const Home = () => {
                 <figure className='relative'>
                     <img className='homeImg' src={PokeBall} alt='Pokeball bg' />
                     <figcaption className='font-extrabold md:text-5xl text-2xl leading-relaxed py-3 px-4 md:w-11/12 w-full mx-auto'>
-                        What Pokemon <br /> are you looking for?
+                        What Pokemon <br /> are you looking for
                     </figcaption>
                 </figure>
                 <SearchBar />
